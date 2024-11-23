@@ -63,7 +63,7 @@ The project uses the following technologies and tools:
 5. **Phase 5**: Enhance UI with Bootstrap for responsive and intuitive design.
 
 ##Future Enhancements
-- Language Support: Add support for multiple languages in the Deepgram transcription process.
+
 - Transcript Export: Allow users to export their transcriptions as text files.
 - Dark Mode: Implement a toggle for dark mode for a better user experience.
 
