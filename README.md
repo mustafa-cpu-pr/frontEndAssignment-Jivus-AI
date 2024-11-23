@@ -1,5 +1,5 @@
 # frontEndAssignment-Jivus-AI
-# Audio Transcription Web Application
+
 
 ## Overview
 This project is a web application designed to allow users to record audio through a microphone component, transcribe the audio using the Deepgram API, and display the transcription in real-time. The application also maintains a record of past transcriptions and provides a user-friendly interface using Bootstrap. Built with React functional components and hooks, this project aims to demonstrate real-time audio recording, transcription, and interaction.
