@@ -76,5 +76,14 @@ The project uses the following technologies and tools:
 - [Deepgram Documentation](https://developers.deepgram.com/docs)
 - [Deepgram Setup Video](https://youtu.be/kIyPX16zuQY?si=o8nq0jp25ZxOtEHD)
 
+## Deepgram Transcription Coding (index.html)
+The main Deepgram transcription functionality is implemented directly within the `index.html` file of the project. This includes:
+
+- **WebSocket Setup**: The JavaScript in the `index.html` file initializes a WebSocket connection to Deepgram's API for real-time audio transcription.
+- **Audio Streaming**: The Web Audio API is used to capture audio from the user's microphone, which is then sent to the Deepgram API for processing.
+- **Transcription Handling**: Once the audio is processed, the JavaScript listens for transcriptions from the Deepgram API and updates the UI with the real-time transcription.
+
+This setup ensures that the transcription process is efficient and responsive, allowing users to see the text as it is being transcribed.
+
 ## Author
 - **Mustafa** - Frontend Developer and Contributor
