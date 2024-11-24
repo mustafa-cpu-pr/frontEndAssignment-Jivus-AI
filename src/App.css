@@ -1,0 +1,10 @@
+/* App.css */
+.nav-link {
+  transition: all 0.3s ease; /* Smooth transition for hover */
+}
+
+.hover-underline-animation:hover {
+  text-decoration: underline;
+  text-decoration-color: grey; /* Green underline */
+  text-decoration-thickness: 2px; /* Thicker underline */
+}

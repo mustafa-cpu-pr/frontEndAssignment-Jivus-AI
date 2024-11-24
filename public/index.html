@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Web site created using create-react-app" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>React App</title>
+    <!-- Link to Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- This is the root div where React app content will be rendered -->
+    <div id="root"></div>
+
+    <!-- Static content that appears after the React app content -->
+    <div id="after-react-content" class="container my-5">
+      <!-- Status Box -->
+      <div id="status" class="alert alert-danger text-center">Stopped</div>
+      
+      <!-- Control Buttons -->
+      <button id="start-btn" class="btn btn-primary btn-lg mb-2">Start Recording</button>
+      <button id="stop-btn" class="btn btn-danger btn-lg mb-2" disabled>Stop Recording</button>
+      
+      <!-- Transcription Box -->
+      <div id="transcription-box" class="border p-3" style="height: 200px; overflow-y: scroll; background-color: #f9f9f9;">The Transcription is:</div>
+    </div>
+
+    <script>
+      let mediaRecorder, socket, stream;
+      let isStopPressed = false; // Flag to track if stop button is pressed
+
+      // Select elements
+      const startButton = document.getElementById('start-btn');
+      const stopButton = document.getElementById('stop-btn');
+      const status = document.getElementById('status');
+      const transcriptionBox = document.getElementById('transcription-box');
+
+      // Update the recording status visually
+      function updateStatus(isRecording) {
+        if (isRecording) {
+          status.textContent = 'Recording...';
+          status.classList.remove('alert-danger');
+          status.classList.add('alert-success');
+        } else {
+          status.textContent = 'Stopped';
+          status.classList.remove('alert-success');
+          status.classList.add('alert-danger');
+        }
+      }
+
+      // Function to request microphone permission
+      async function requestMicrophonePermission() {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          // If permission is granted, return the stream
+          return stream;
+        } catch (error) {
+          transcriptionBox.textContent = 'Permission denied or error accessing microphone: ' + error.message;
+          throw error; // Rethrow the error to stop further execution
+        }
+      }
+
+      // Start recording and transcription
+      async function startRecording() {
+        try {
+          // Request microphone permission
+          stream = await requestMicrophonePermission();
+
+          // Initialize MediaRecorder
+          mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+
+          // Initialize WebSocket
+          socket = new WebSocket('wss://api.deepgram.com/v1/listen', [
+            'token',
+            '8072e4996326677eba542f395c16f347e016adb0',
+          ]);
+
+          socket.onopen = () => {
+            console.log('WebSocket connection opened.');
+            mediaRecorder.addEventListener('dataavailable', (event) => {
+              if (socket.readyState === WebSocket.OPEN) {
+                socket.send(event.data); // Send audio data to the Deepgram API
+              }
+            });
+            mediaRecorder.start(250); // Set recording interval to 250ms
+            updateStatus(true);
+          };
+
+          socket.onmessage = (message) => {
+            const received = JSON.parse(message.data);
+            const transcript = received.channel.alternatives[0].transcript;
+
+            if (transcript) {
+              transcriptionBox.textContent += '\n' + transcript;
+              transcriptionBox.scrollTop = transcriptionBox.scrollHeight; // Auto-scroll
+            }
+          };
+
+          socket.onerror = (error) => {
+            console.error('WebSocket Error:', error);
+            transcriptionBox.textContent = 'WebSocket Error: ' + error.message;
+          };
+
+          socket.onclose = () => {
+            // Only display "WebSocket connection closed" if it was not due to the stop button
+            if (!isStopPressed) {
+              console.log('WebSocket connection closed');
+              transcriptionBox.textContent += '\n[WebSocket connection closed]';
+            }
+            // Reset the stop flag
+            isStopPressed = false;
+          };
+
+          // Enable stop button, disable start button
+          startButton.disabled = true;
+          stopButton.disabled = false;
+        } catch (error) {
+          console.error('Error during microphone setup:', error);
+        }
+      }
+
+      // Stop recording and close WebSocket
+      function stopRecording() {
+        isStopPressed = true; // Set flag to true when stop is pressed
+
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+          mediaRecorder.stop();
+        }
+        if (socket && socket.readyState === WebSocket.OPEN) {
+          socket.close();
+        }
+        if (stream) {
+          stream.getTracks().forEach((track) => track.stop());
+        }
+
+        updateStatus(false);
+
+        startButton.disabled = false;
+        stopButton.disabled = true;
+      }
+
+      // Attach event listeners
+      startButton.addEventListener('click', startRecording);
+      stopButton.addEventListener('click', stopRecording);
+    </script>
+  </body>
+</html>
