@@ -1,5 +1,4 @@
-# frontEndAssignment-Jivus-AI
-
+# FrontEndAssignment-Jivus-AI
 
 ## Overview
 This project is a web application designed to allow users to record audio through a microphone component, transcribe the audio using the Deepgram API, and display the transcription in real-time. The application also maintains a record of past transcriptions and provides a user-friendly interface using Bootstrap. Built with React functional components and hooks, this project aims to demonstrate real-time audio recording, transcription, and interaction.
@@ -56,23 +55,26 @@ The project uses the following technologies and tools:
     - Styled the application with Bootstrap to ensure it works well across different devices and screen sizes.
 
 ## Development Roadmap
-1. **Phase 1**: Implement microphone button and Web Audio API integration for recording.
-2. **Phase 2**: Set up Deepgram API for real-time transcription using WebSocket.
-3. **Phase 3**: Display transcribed text on the UI and ensure smooth user interaction.
-4. **Phase 4**: Add features to save past transcriptions for future access.
-5. **Phase 5**: Enhance UI with Bootstrap for responsive and intuitive design.
+1. **Phase 1**: 
+    - Implement microphone button and Web Audio API integration for recording.
+2. **Phase 2**: 
+    - Set up Deepgram API for real-time transcription using WebSocket.
+3. **Phase 3**: 
+    - Display transcribed text on the UI and ensure smooth user interaction.
+4. **Phase 4**: 
+    - Add features to save past transcriptions for future access.
+5. **Phase 5**: 
+    - Enhance UI with Bootstrap for responsive and intuitive design.
 
-##Future Enhancements
+## Future Enhancements
+- **Transcript Export**: 
+    - Allow users to export their transcriptions as text files.
+- **Dark Mode**: 
+    - Implement a toggle for dark mode for a better user experience.
 
-- Transcript Export: Allow users to export their transcriptions as text files.
-- Dark Mode: Implement a toggle for dark mode for a better user experience.
+## Deepgram API Setup
+- [Deepgram Documentation](https://developers.deepgram.com/docs)
+- [Deepgram Setup Video](https://youtu.be/kIyPX16zuQY?si=o8nq0jp25ZxOtEHD)
 
-##Deepgram API Setup 
-- https://developers.deepgram.com/docs
-- https://youtu.be/kIyPX16zuQY?si=o8nq0jp25ZxOtEHD
-
-##Author
-- Mustafa - Frontend Developer and Contributor
-
-
-
+## Author
+- **Mustafa** - Frontend Developer and Contributor
